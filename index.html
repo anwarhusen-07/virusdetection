@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Antivirus - Web Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Real Antivirus</h1>
+                    <p class="subtitle">Advanced Web-Based Security Scanner</p>
+                </div>
+            </div>
+            <div class="status">
+                <div class="status-label">System Status</div>
+                <div class="status-indicator">
+                    <div class="pulse"></div>
+                    Protected
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('scanner')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                </svg>
+                Scanner
+            </button>
+            <button class="tab-btn" onclick="switchTab('reports')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Reports
+            </button>
+        </div>
+
+        <!-- Scanner Tab Content -->
+        <div id="scanner" class="content active">
+            <div class="grid">
+                <!-- Control Panel -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        File Scanner
+                    </h2>
+
+                    <input type="file" id="fileInput" multiple>
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()" id="selectBtn">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        Select Files to Scan
+                    </button>
+
+                    <div id="fileListContainer" style="display: none;" class="file-list">
+                        <div class="file-list-title">Selected Files:</div>
+                        <div id="fileList"></div>
+                    </div>
+
+                    <button class="btn btn-success" onclick="startScan()" id="scanBtn" disabled>
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        </svg>
+                        Start Scan
+                    </button>
+
+                    <div id="progressSection" class="progress-section" style="display: none;">
+                        <div class="progress-header">
+                            <span>Scanning Progress</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                    </div>
+
+                    <div id="statsContainer" class="stats" style="display: none;">
+                        <div class="stat-card total">
+                            <div class="stat-value" id="statTotal">0</div>
+                            <div class="stat-label">Total Scanned</div>
+                        </div>
+                        <div class="stat-card infected">
+                            <div class="stat-value" id="statInfected">0</div>
+                            <div class="stat-label">Threats Found</div>
+                        </div>
+                        <div class="stat-card clean">
+                            <div class="stat-value" id="statClean">0</div>
+                            <div class="stat-label">Clean Files</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan Logs -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Scan Logs
+                    </h2>
+                    <div class="log-container" id="logContainer">
+                        <div style="text-align: center; padding: 100px 20px; color: #6b7280;">
+                            No scans performed yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab Content -->
+        <div id="reports" class="content">
+            <div class="card">
+                <h2 class="card-title">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Scan Reports
+                </h2>
+                <div id="reportsList">
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3>No reports available</h3>
+                        <p>Run a scan to generate reports</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Real Antivirus Web Edition • Built with HTML, CSS & JavaScript • Educational Purpose Only
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
